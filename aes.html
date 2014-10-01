@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body {
+				background-color: #88A;
+				padding: 10px 30px 0 30px;
+			}
+			textarea, input {
+				width: 100%;
+				background-color: #FFE;
+				border-width: 0;
+				margin-top: 20px;
+				padding: 7px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<textarea id="plaintext" rows="20" placeholder="plaintext"></textarea>
+		<input id="password" placeholder="password"></input>
+		<textarea id="ciphertext" rows="10" placeholder="ciphertext"></textarea>
+
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/aes.js"></script>
+		<script src="js/aes-ctr.js"></script>
+
+		<script type="application/javascript">
+			$('#plaintext').on('propertychange keyup input paste change', function() {
+				var plaintext = $(this).val();
+				var password = $('#password').val();
+				var ciphertext = Aes.Ctr.encrypt('plaintext' + plaintext, password, 256);
+				$('#ciphertext').val(ciphertext);
+			});
+
+
+			$('#ciphertext').on('propertychange keyup input paste change', function() {
+				var ciphertext = $(this).val();
+				var password = $('#password').val();
+				var origtext = Aes.Ctr.decrypt(ciphertext, password, 256).substring(9);
+				$('#plaintext').val(origtext);
+			});
+
+		</script>
+	</body>
+</html>
+
